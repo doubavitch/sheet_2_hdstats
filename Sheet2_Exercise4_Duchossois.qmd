@@ -1,0 +1,32 @@
+---
+title: "Sheet2_Exercise4_Duchossois"
+author: "Clara Duchossois"
+date: "2024-04-04"
+output: html-document
+---
+
+### Loading libraries
+
+```{r}
+library(tidyverse)
+library(tidyr)
+library(broom)
+```
+
+### Question 1: Calculate a table that shows the mean and standard deviation of hormonal concentrations by treatment.
+
+```{r}
+# Create a tibble (dataframe) containing the data collected:
+data <- tibble(
+  untreated = c(117, 124, 40, 88),
+  oestrogen = c(440, 264, 221, 136),
+  progesterone = c(605, 626, 385, 475))
+
+
+# Compute the mean and the standard deviation for each treatment
+data |> summarise(across(everything(),
+                  list(mean = ~ mean(.x), 
+                       sd = ~ sd(.x))))
+
+```
+
