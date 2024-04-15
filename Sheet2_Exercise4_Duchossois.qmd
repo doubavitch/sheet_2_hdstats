@@ -22,11 +22,23 @@ data <- tibble(
   oestrogen = c(440, 264, 221, 136),
   progesterone = c(605, 626, 385, 475))
 
-
 # Compute the mean and the standard deviation for each treatment
-data |> summarise(across(everything(),
-                  list(mean = ~ mean(.x), 
-                       sd = ~ sd(.x))))
+computations <- data |> summarise(across(everything(),
+                        list(mean = ~ mean(.x), 
+                        sd = ~ sd(.x))))
+
+# Gather the results into a single table
+summary_data <- data |> 
+  summarise(across(everything(), list(mean = mean, sd = sd))) |> 
+  pivot_longer(cols = everything(), names_to = "Treatment", values_to = "Value") |> 
+  separate(Treatment, into = c("Treatment", "Stat"), sep = "_") |> 
+  pivot_wider(names_from = Stat, values_from = Value)
+
+summary_data
 
 ```
+
+
+
+
 
