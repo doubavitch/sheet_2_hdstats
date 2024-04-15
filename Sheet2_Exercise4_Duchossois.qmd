@@ -22,12 +22,7 @@ data <- tibble(
   oestrogen = c(440, 264, 221, 136),
   progesterone = c(605, 626, 385, 475))
 
-# Compute the mean and the standard deviation for each treatment
-computations <- data |> summarise(across(everything(),
-                        list(mean = ~ mean(.x), 
-                        sd = ~ sd(.x))))
-
-# Gather the results into a single table
+# Compute the mean and the standard deviation for each treatment, and gather the results in a single table
 summary_data <- data |> 
   summarise(across(everything(), list(mean = mean, sd = sd))) |> 
   pivot_longer(cols = everything(), names_to = "Treatment", values_to = "Value") |> 
@@ -35,6 +30,13 @@ summary_data <- data |>
   pivot_wider(names_from = Stat, values_from = Value)
 
 summary_data
+
+```
+
+
+### Question 2: Use ANOVA to test for a difference between treatments in the hormonal concentrations of the dogs, with a significance level α = 0.05. What is your conclusion about the effect of the treatments ?
+
+```{r}
 
 ```
 
