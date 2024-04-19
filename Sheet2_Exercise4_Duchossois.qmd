@@ -1,5 +1,5 @@
 ---
-title: "Sheet2_Exercise4_Duchossois"
+title: "Solution Ex4 Sheet2 Duchossois"
 author: "Clara Duchossois"
 date: "2024-04-04"
 output: html-document
@@ -11,6 +11,7 @@ output: html-document
 library(tidyverse)
 library(tidyr)
 library(broom)
+library(stats)
 ```
 
 ### Question 1: Calculate a table that shows the mean and standard deviation of hormonal concentrations by treatment.
@@ -37,6 +38,33 @@ summary_data
 ### Question 2: Use ANOVA to test for a difference between treatments in the hormonal concentrations of the dogs, with a significance level α = 0.05. What is your conclusion about the effect of the treatments ?
 
 ```{r}
+# First need reshape the data to long format in order to perform ANOVA
+long_data <- data |> 
+  pivot_longer(cols = everything(), names_to = "Treatment", values_to = "Value")
+long_data
+
+# Use ANOVA on the data 
+anova <- aov(Value ~ Treatment, data = long_data)
+
+# Summary of the results obtained with ANOVA
+summary_anova <- summary(anova)
+
+cat("\nANOVA Summary")
+summary_anova
+
+# Extract p-value from the ANOVA summary
+p_value <- summary_anova[[1]]$"Pr(>F)"[1]
+
+cat("\n\nHypothesis testing:\n")
+cat("p-value:", p_value, "\n\n")
+
+# Test the hypothesis by comparing the p-value with the significance level alpha = 0.05
+alpha <- 0.05
+if (p_value < alpha) {
+  cat("We reject the null hypothesis.\nWe conclude that there is a significant difference between treatments in the hormonal concentrations of the dogs.\nIn other words, the treatments significantly affected the hormonal concentrations of the dogs.\n")
+} else {
+  cat("We accept the null hypothesis.\nWe conclude that there is no significant difference between treatments in the hormonal concentrations of the dogs.\n\nIn other words, the treatments did not significantly affect the hormonal concentrations of the dogs.\n")
+}
 
 ```
 
